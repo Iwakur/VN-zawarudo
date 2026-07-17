@@ -5,7 +5,7 @@
 ## Technical decisions:
 - NO PHONE VERSION WILL BE DEVELOPED
 - Every decision should be consistent and fit general vibe/aethstetic, read README.md
-
+ if it's comennted it IS for a good reason, don't touch it
 
 
 

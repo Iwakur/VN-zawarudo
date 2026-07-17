@@ -37,7 +37,7 @@ translate None strings:
     old "vertical scroll"
     new "vertical scroll"
 
-    # renpy/common/00accessibility.rpy:37
+    # renpy/GNUcommon/00accessibility.rpy:37
     old "activate"
     new "activate"
 

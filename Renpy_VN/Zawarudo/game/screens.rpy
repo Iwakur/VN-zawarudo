@@ -319,10 +319,10 @@ screen navigation():
 
         textbutton _("Dossier") action ShowMenu("about")
 
-        if renpy.variant("pc") or renpy.variant("web"):
+        # if renpy.variant("pc") or renpy.variant("web"):
 
-            ## Help is available on desktop and web builds.
-            textbutton _("Help") action ShowMenu("help")
+        #     ## Help is available on desktop and web builds.
+        #     textbutton _("Help") action ShowMenu("help")
 
         if renpy.variant("pc"):
 
@@ -381,8 +381,8 @@ screen main_menu():
 
             textbutton _("Dossier") action ShowMenu("about") at main_menu_button_intro
 
-            if renpy.variant("pc") or renpy.variant("web"):
-                textbutton _("Help") action ShowMenu("help") at main_menu_button_intro
+            # if renpy.variant("pc") or renpy.variant("web"):
+            #     textbutton _("Help") action ShowMenu("help") at main_menu_button_intro
 
             if renpy.variant("pc"):
                 textbutton _("Quit") action Quit(confirm=True) at main_menu_button_intro
@@ -624,7 +624,7 @@ screen about():
             if gui.about:
                 text "[gui.about!t]\n"
 
-            text _("Made with {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
+            # text _("Made with {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
 
 
 style about_label is gui_label
@@ -1249,7 +1249,9 @@ style confirm_frame:
     padding gui.confirm_frame_borders.padding
     xalign .5
     yalign .5
-
+    xsize 800
+    ysize 400
+# Added size to change the size of the text box for confirmation prompts
 style confirm_prompt_text:
     textalign 0.5
     layout "subtitle"
