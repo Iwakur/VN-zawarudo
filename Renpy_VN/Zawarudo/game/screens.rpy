@@ -110,10 +110,8 @@ screen say(who, what):
         text what id "what"
 
 
-    ## If there's a side image, display it above the text. Do not display on the
-    ## phone variant - there's no room.
-    if not renpy.variant("small"):
-        add SideImage() xalign 0.0 yalign 1.0
+    ## If there's a side image, display it above the text.
+    add SideImage() xalign 0.0 yalign 1.0
 
 
 ## Make the namebox available for styling through the Character object.
@@ -247,13 +245,13 @@ screen quick_menu():
             style "quick_menu"
 
             textbutton _("Back") action Rollback()
-            textbutton _("History") action ShowMenu('history')
+            textbutton _("Log") action ShowMenu('history')
             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
             textbutton _("Auto") action Preference("auto-forward", "toggle")
             textbutton _("Save") action ShowMenu('save')
-            textbutton _("Q.Save") action QuickSave()
-            textbutton _("Q.Load") action QuickLoad()
-            textbutton _("Prefs") action ShowMenu('preferences')
+            textbutton _("Q-Save") action QuickSave()
+            textbutton _("Q-Load") action QuickLoad()
+            textbutton _("Config") action ShowMenu('preferences')
 
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
@@ -307,9 +305,9 @@ screen navigation():
 
             textbutton _("Save") action ShowMenu("save")
 
-        textbutton _("Load") action ShowMenu("load")
+        textbutton _("Archive") action ShowMenu("load")
 
-        textbutton _("Preferences") action ShowMenu("preferences")
+        textbutton _("Config") action ShowMenu("preferences")
 
         if _in_replay:
 
@@ -319,11 +317,11 @@ screen navigation():
 
             textbutton _("Main Menu") action MainMenu()
 
-        textbutton _("About") action ShowMenu("about")
+        textbutton _("Dossier") action ShowMenu("about")
 
-        if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+        if renpy.variant("pc") or renpy.variant("web"):
 
-            ## Help isn't necessary or relevant to mobile devices.
+            ## Help is available on desktop and web builds.
             textbutton _("Help") action ShowMenu("help")
 
         if renpy.variant("pc"):
@@ -357,53 +355,114 @@ screen main_menu():
 
     add gui.main_menu_background
 
-    ## This empty frame darkens the main menu.
     frame:
-        style "main_menu_frame"
+        style "main_menu_strip"
+        at main_menu_strip_intro
 
-    ## The use statement includes another screen inside this one. The actual
-    ## contents of the main menu are in the navigation screen.
-    use navigation
+        hbox:
+            style_prefix "main_menu"
+            style "main_menu_nav"
 
-    if gui.show_name:
+            vbox:
+                spacing 2
 
-        vbox:
-            style "main_menu_vbox"
+                text _("DOSSIER"):
+                    style "main_menu_dossier_label"
+                    at main_menu_label_intro
 
-            text "[config.name!t]":
-                style "main_menu_title"
+                frame:
+                    style "main_menu_dossier_rule"
 
-            text "[config.version]":
-                style "main_menu_version"
+            textbutton _("Start") action Start() at main_menu_button_intro
+
+            textbutton _("Archive") action ShowMenu("load") at main_menu_button_intro
+
+            textbutton _("Config") action ShowMenu("preferences") at main_menu_button_intro
+
+            textbutton _("Dossier") action ShowMenu("about") at main_menu_button_intro
+
+            if renpy.variant("pc") or renpy.variant("web"):
+                textbutton _("Help") action ShowMenu("help") at main_menu_button_intro
+
+            if renpy.variant("pc"):
+                textbutton _("Quit") action Quit(confirm=True) at main_menu_button_intro
 
 
-style main_menu_frame is empty
-style main_menu_vbox is vbox
-style main_menu_text is gui_text
-style main_menu_title is main_menu_text
-style main_menu_version is main_menu_text
+# Bottom command bar container.
+style main_menu_strip is empty
 
-style main_menu_frame:
-    xsize 420
-    yfill True
+# Horizontal row for dossier label plus commands.
+style main_menu_nav is hbox
 
-    background "gui/overlay/main_menu.png"
+# Minimal command hitbox.
+style main_menu_button is button
 
-style main_menu_vbox:
-    xalign 1.0
-    xoffset -30
-    xmaximum 1200
+# Minimal command text.
+style main_menu_button_text is button_text
+
+# Left dossier label.
+style main_menu_dossier_label is gui_text
+
+# Red dossier underline.
+style main_menu_dossier_rule is empty
+
+transform main_menu_strip_intro:
+    alpha 0.0
+    yoffset 18
+    linear 0.35 alpha 1.0 yoffset 0
+
+transform main_menu_label_intro:
+    alpha 0.0
+    xoffset -12
+    linear 0.35 alpha 1.0 xoffset 0 yoffset 5
+
+transform main_menu_button_intro:
+    alpha 0.0
+    yoffset 30
+    linear 0.28 alpha 1.0 yoffset 25
+
+# FullHD bottom placement.
+style main_menu_strip:
+    xalign 0.5
     yalign 1.0
+    xsize 1760
+    xoffset 0
     yoffset -30
+    left_padding 28
+    right_padding 28
+    top_padding 16
+    bottom_padding 16
 
-style main_menu_text:
-    properties gui.text_properties("main_menu", accent=True)
+    # background Solid("#080707b8")
 
-style main_menu_title:
-    properties gui.text_properties("title")
+style main_menu_nav:
+    xalign 0.0
+    yalign 0.65
+    spacing 16
 
-style main_menu_version:
-    properties gui.text_properties("version")
+style main_menu_button:
+    left_padding 12
+    right_padding 12
+    top_padding 0
+    bottom_padding 0
+
+style main_menu_button_text:
+    properties gui.text_properties("navigation_button")
+    size 30
+    yalign 0.5
+
+style main_menu_dossier_label:
+    properties gui.text_properties("title", accent=True)
+    font "fonts/Oswald-VariableFont_wght.ttf"
+    size 38
+    color gui.interface_text_color
+    yalign 0.5
+
+style main_menu_dossier_rule:
+    xsize 136
+    ysize 2
+    background Solid(gui.accent_color)
+    yalign 0.62
 
 
 ## Game Menu screen ############################################################
@@ -1506,116 +1565,3 @@ define bubble.expand_area = {
     "top_right" : (0, 22, 0, 0),
     "thought" : (0, 0, 0, 0),
 }
-
-
-
-################################################################################
-## Mobile Variants
-################################################################################
-
-style pref_vbox:
-    variant "medium"
-    xsize 675
-
-## Since a mouse may not be present, we replace the quick menu with a version
-## that uses fewer and bigger buttons that are easier to touch.
-screen quick_menu():
-    variant "touch"
-
-    zorder 100
-
-    if quick_menu:
-
-        hbox:
-            style "quick_menu"
-            style_prefix "quick"
-
-            textbutton _("Back") action Rollback()
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Menu") action ShowMenu()
-
-
-style window:
-    variant "small"
-    background "gui/phone/textbox.png"
-
-style radio_button:
-    variant "small"
-    foreground "gui/phone/button/radio_[prefix_]foreground.png"
-
-style check_button:
-    variant "small"
-    foreground "gui/phone/button/check_[prefix_]foreground.png"
-
-style nvl_window:
-    variant "small"
-    background "gui/phone/nvl.png"
-
-style main_menu_frame:
-    variant "small"
-    background "gui/phone/overlay/main_menu.png"
-
-style game_menu_outer_frame:
-    variant "small"
-    background "gui/phone/overlay/game_menu.png"
-
-style game_menu_navigation_frame:
-    variant "small"
-    xsize 510
-
-style game_menu_content_frame:
-    variant "small"
-    top_margin 0
-
-style game_menu_viewport:
-    variant "small"
-    xsize 1305
-
-style pref_vbox:
-    variant "small"
-    xsize 600
-
-style bar:
-    variant "small"
-    ysize gui.bar_size
-    left_bar Frame("gui/phone/bar/left.png", gui.bar_borders, tile=gui.bar_tile)
-    right_bar Frame("gui/phone/bar/right.png", gui.bar_borders, tile=gui.bar_tile)
-
-style vbar:
-    variant "small"
-    xsize gui.bar_size
-    top_bar Frame("gui/phone/bar/top.png", gui.vbar_borders, tile=gui.bar_tile)
-    bottom_bar Frame("gui/phone/bar/bottom.png", gui.vbar_borders, tile=gui.bar_tile)
-
-style scrollbar:
-    variant "small"
-    ysize gui.scrollbar_size
-    base_bar Frame("gui/phone/scrollbar/horizontal_[prefix_]bar.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
-    thumb Frame("gui/phone/scrollbar/horizontal_[prefix_]thumb.png", gui.scrollbar_borders, tile=gui.scrollbar_tile)
-
-style vscrollbar:
-    variant "small"
-    xsize gui.scrollbar_size
-    base_bar Frame("gui/phone/scrollbar/vertical_[prefix_]bar.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
-    thumb Frame("gui/phone/scrollbar/vertical_[prefix_]thumb.png", gui.vscrollbar_borders, tile=gui.scrollbar_tile)
-
-style slider:
-    variant "small"
-    ysize gui.slider_size
-    base_bar Frame("gui/phone/slider/horizontal_[prefix_]bar.png", gui.slider_borders, tile=gui.slider_tile)
-    thumb "gui/phone/slider/horizontal_[prefix_]thumb.png"
-
-style vslider:
-    variant "small"
-    xsize gui.slider_size
-    base_bar Frame("gui/phone/slider/vertical_[prefix_]bar.png", gui.vslider_borders, tile=gui.slider_tile)
-    thumb "gui/phone/slider/vertical_[prefix_]thumb.png"
-
-style slider_vbox:
-    variant "small"
-    xsize None
-
-style slider_slider:
-    variant "small"
-    xsize 900
