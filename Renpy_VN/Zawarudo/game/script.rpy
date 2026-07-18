@@ -30,6 +30,8 @@ define m = Character(
     what_slow_cps=20
 )
 
+default current_map = "start"
+
 label start:
 
 

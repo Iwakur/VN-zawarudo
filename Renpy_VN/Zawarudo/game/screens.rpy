@@ -247,11 +247,34 @@ screen quick_menu():
             textbutton _("Back") action Rollback()
             textbutton _("Log") action ShowMenu('history')
             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Save") action ShowMenu('save')
-            textbutton _("Q-Save") action QuickSave()
-            textbutton _("Q-Load") action QuickLoad()
-            textbutton _("Config") action ShowMenu('preferences')
+            text "|" style "quick_separator"
+            # textbutton _("Auto") action Preference("auto-forward", "toggle")
+            # textbutton _("Save") action ShowMenu('save')
+            # textbutton _("Load") action ShowMenu("load")
+            # text "|" style "quick_separator"
+            textbutton _("Map") action ShowMenu('world_map')
+            # textbutton _("Q-Save") action QuickSave()
+            # textbutton _("Q-Load") action QuickLoad()
+            # textbutton _("Config") action ShowMenu('preferences')
+
+
+style quick_separator is quick_button_text:
+    color "#777777"
+    xpadding 8
+
+screen world_map():
+
+    tag menu
+
+    add "images/maps/map_[current_map].png":
+        fit "contain"
+        xalign 0.5
+        yalign 0.5
+
+    textbutton _("Return"):
+        action Return()
+        xalign 0.96
+        yalign 0.94
 
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
@@ -266,8 +289,12 @@ style quick_button is default
 style quick_button_text is button_text
 
 style quick_menu:
-    xalign 0.5
-    yalign 1.0
+    xalign 0.0
+    yalign 0.0
+    xpadding 10
+    ypadding 4
+    background Solid("#08070780")
+
 
 style quick_button:
     properties gui.button_properties("quick_button")
@@ -305,7 +332,7 @@ screen navigation():
 
             textbutton _("Save") action ShowMenu("save")
 
-        textbutton _("Archive") action ShowMenu("load")
+        textbutton _("Load") action ShowMenu("load")
 
         textbutton _("Config") action ShowMenu("preferences")
 
@@ -375,7 +402,7 @@ screen main_menu():
 
             textbutton _("Start") action Start() at main_menu_button_intro
 
-            textbutton _("Archive") action ShowMenu("load") at main_menu_button_intro
+            textbutton _("Load") action ShowMenu("load") at main_menu_button_intro
 
             textbutton _("Config") action ShowMenu("preferences") at main_menu_button_intro
 
