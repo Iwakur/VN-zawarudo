@@ -317,7 +317,7 @@ screen navigation():
 
             textbutton _("Main Menu") action MainMenu()
 
-        textbutton _("Dossier") action ShowMenu("about")
+        # textbutton _("Dossier") action ShowMenu("about")
 
         # if renpy.variant("pc") or renpy.variant("web"):
 
@@ -379,7 +379,7 @@ screen main_menu():
 
             textbutton _("Config") action ShowMenu("preferences") at main_menu_button_intro
 
-            textbutton _("Dossier") action ShowMenu("about") at main_menu_button_intro
+            # textbutton _("Dossier") action ShowMenu("about") at main_menu_button_intro
 
             # if renpy.variant("pc") or renpy.variant("web"):
             #     textbutton _("Help") action ShowMenu("help") at main_menu_button_intro
